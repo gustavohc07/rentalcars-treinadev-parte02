@@ -1,3 +1,15 @@
-<h1>Editar categoria</h1>
+<%= form_for @category do |f|%>
+  <%= f.label :name %>
+  <%= f.text_field :name%>  
 
-<%= render partial: 'form', locals: { category: @category } %>
+  <%= f.label :daily_rate %>
+  <%= f.number_field :daily_rate %> 
+
+  <%= f.label :car_insurance %>
+  <%= f.number_field :car_insurance %> 
+
+  <%= f.label :third_party_insurance %>
+  <%= f.number_field :third_party_insurance %>
+
+  <%= f.submit 'Enviar'%>
+<% end %>
