@@ -7,7 +7,6 @@ class CategoriesController < ApplicationController
   end
 
   def show
-    #@category = Category.find(params[:id])
   end
 
   def new
@@ -15,11 +14,9 @@ class CategoriesController < ApplicationController
   end
   
   def edit
-    #@category = Category.find(params[:id])
   end
 
   def update
-    #@category = Category.find(params[:id])
     @category.update(category_params)
     redirect_to @category
     flash[:notice]= 'Categoria editada com sucesso!'
