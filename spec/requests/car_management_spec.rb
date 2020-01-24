@@ -77,8 +77,28 @@ require 'rails_helper'
         it 'should not create if missing parameter' do
           post api_v1_cars_path, params: {}
 
+          json = JSON.parse(response.body)
           expect(response).to have_http_status(412)
-          expect(response.body).to include('Validation error')
+          expect(json['erro']).to include('Modelo é obrigatório')
+
+        end
+        it 'should return status 500 if a unexpected error ocurred' do
+          
+          allow_any_instance_of(Car).to receive(:save).and_raise(ActiveRecord::ActiveRecordError)
+          subsidiary = create(:subsidiary)
+          car_model = create(:car_model)
+          
+          post api_v1_cars_path, params: 
+                                              {
+                                                car_km: 1000,
+                                                license_plate: 'ABC1234',
+                                                color: 'Azul',
+                                                subsidiary_id: subsidiary.id,
+                                                car_model_id: car_model.id,
+                                              }
+          json = JSON.parse(response.body)
+          expect(response).to have_http_status(500)
+          expect(json["message"]).to eq('Unexpeted error')
 
         end
       end
@@ -101,11 +121,19 @@ require 'rails_helper'
          expect(car.license_plate).to eq('DEF5678')
          expect(car.color).to eq('Preto')
         end
-
-        #incluir verificação create ao invés de update
       end
-      
-      
+
+      context 'delete' do
+        it 'should delete car successfully' do
+          car = create(:car, car_km: 1000, license_plate: 'ABC1234', color: 'Azul')
+
+          delete api_v1_car_path(car.id)
+
+          expect(response).to have_http_status(:ok)
+          expect(response.body).to include('Deleted successfully')
+          expect(Car.count).to eq (0)
+        end
+      end
     end
     
   end

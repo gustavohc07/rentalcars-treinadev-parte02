@@ -19,7 +19,7 @@ class Api::V1::CarsController < Api::V1::ApiController
       @car.save
       render json: 'Created successfully', status: :created 
     else
-      render json: 'Validation error', status: 412
+      render json: { erro: "#{errors}"}, status: 412
     end
   end
   
@@ -30,7 +30,18 @@ class Api::V1::CarsController < Api::V1::ApiController
 
   end
 
+  def destroy
+    @car = Car.find_by(id: params[:id] )
+    @car.delete
+    render json: 'Deleted successfully', status: :ok
+  end
+
   private
+  def errors
+     @car.errors.full_messages.each do |message|
+      message
+     end
+  end
 
   def car_params
     params.permit(:car_km, :license_plate, :color,
