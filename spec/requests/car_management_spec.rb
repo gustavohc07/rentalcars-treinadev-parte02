@@ -84,7 +84,7 @@ require 'rails_helper'
         end
         it 'should return status 500 if a unexpected error ocurred' do
           
-          allow_any_instance_of(Car).to receive(:save).and_raise(ActiveRecord::ActiveRecordError)
+          allow_any_instance_of(Car).to receive(:save!).and_raise(ActiveRecord::ActiveRecordError)
           subsidiary = create(:subsidiary)
           car_model = create(:car_model)
           

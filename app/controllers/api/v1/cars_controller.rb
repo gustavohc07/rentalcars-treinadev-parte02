@@ -16,7 +16,7 @@ class Api::V1::CarsController < Api::V1::ApiController
   def create
     @car = Car.new(car_params)
     if @car.valid?
-      @car.save
+      @car.save!
       render json: 'Created successfully', status: :created 
     else
       render json: { erro: "#{errors}"}, status: 412
