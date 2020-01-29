@@ -2,7 +2,7 @@ class Api::V1::CarsController < Api::V1::ApiController
   def show
     @car = Car.find_by(id: params[:id])
     if @car
-      render json: @car
+      render json: @car.as_json(methods: url_for(@car.photo))
     else
       head :not_found
     end
@@ -45,6 +45,6 @@ class Api::V1::CarsController < Api::V1::ApiController
 
   def car_params
     params.permit(:car_km, :license_plate, :color,
-                                :subsidiary_id, :car_model_id)
+                                :subsidiary_id, :car_model_id, :photo)
   end
 end

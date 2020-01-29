@@ -3,11 +3,12 @@ require 'rails_helper'
     context 'show' do
       it 'renders a car correctly' do
         car = create(:car)
-
+        car.photo.attach(io: File.open('spec/support/GTR.jpg'), filename: 'GTR.jpg', content_type: 'image/jpg' )
+        
         get api_v1_car_path(car)
-
+        pp response.body
         json = JSON.parse(response.body, symbolize_names: true)
-
+        #pp json
         expect(response).to have_http_status(:ok)
         
 
@@ -101,6 +102,24 @@ require 'rails_helper'
           expect(json["message"]).to eq('Unexpeted error')
 
         end
+
+        it 'upload a car photo correctly' do
+          subsidiary = create(:subsidiary)
+          car_model = create(:car_model)
+
+          post api_v1_cars_path, params: 
+                                              {
+                                                car_km: 1000,
+                                                license_plate: 'ABC1234',
+                                                color: 'Azul',
+                                                subsidiary_id: subsidiary.id,
+                                                car_model_id: car_model.id,
+                                                photo: Rails.root.join('../support/GTR.jpg')
+                                              }
+          pp response.body
+          expect(response).to have_http_status(:created)
+          expect(response.body).to include('Created successfully')
+         end
       end
 
       context 'update' do

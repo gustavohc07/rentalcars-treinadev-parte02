@@ -23,6 +23,13 @@ require 'rails_helper'
         expect(mail.subject).to include("Caro #{client.name} seu registro foi concluído com sucesso")
       end
 
+      it 'should have correct body' do
+        client = create(:individual_client, name: 'Joãozinho da Silva', email: 'teste@email.com')
+        mail = ClientMailer.welcome_email(client.id)
+
+        expect(mail.body).to include("Seja bem vindo, #{client.name}! Ative o sininho para receber notificações!")
+      end
+
     end
     
     
